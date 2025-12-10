@@ -1,0 +1,45 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_dummy_car_data
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_denodo
+    SCHEMANAME='${databases.postgres.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_dummy_car_data.SCHEMANAME}' ESCAPE
+    RELATIONNAME='dummy_car_data' 
+    OUTPUTSCHEMA (
+        id = 'id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        make = 'make' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        body_type = 'body_type' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        year = 'year' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  ESCAPE SORTABLE,
+        color = 'color' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        mileage = 'mileage' :'java.math.BigDecimal' (OPT) (sourcetyperadix='10', sourcetypeid='2', sourcetypename='numeric')  SORTABLE
+    )
+    CONSTRAINT 'dummy_car_data_pkey' PRIMARY KEY ( 'id' )
+    INDEX 'dummy_car_data_pkey' OTHER UNIQUE PRIMARY ( 'id' );
+
+CREATE OR REPLACE TABLE bv_dummy_car_data I18N us_cst (
+        id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        make:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        body_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        year:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        color:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        mileage:decimal (sourcetypeid = '2', sourcetyperadix = '10')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'dummy_car_data_pkey' PRIMARY KEY ( 'id' )
+    CACHE FULL
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_dummy_car_data(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD make (any) OPT ANY
+             ADD body_type (any) OPT ANY
+             ADD year (any) OPT ANY
+             ADD color (any) OPT ANY
+             ADD mileage (any) OPT ANY
+        )
+        OUTPUTLIST (body_type, color, id, make, mileage, year
+        )
+        WRAPPER (jdbc bv_dummy_car_data)
+    );
+

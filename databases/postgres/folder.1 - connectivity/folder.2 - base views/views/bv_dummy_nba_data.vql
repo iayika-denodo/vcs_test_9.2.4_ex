@@ -1,0 +1,48 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_dummy_nba_data
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_denodo
+    SCHEMANAME='${databases.postgres.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_dummy_nba_data.SCHEMANAME}' ESCAPE
+    RELATIONNAME='dummy_nba_data' 
+    OUTPUTSCHEMA (
+        id = 'id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  NOT NULL SORTABLE,
+        player_name = 'player_name' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        team = 'team' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        position = 'position' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  ESCAPE SORTABLE,
+        points_per_game = 'points_per_game' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='5', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        rebounds_per_game = 'rebounds_per_game' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='5', sourcetypeid='2', sourcetypename='numeric')  SORTABLE,
+        assists_per_game = 'assists_per_game' :'java.math.BigDecimal' (OPT) (sourcetypedecimals='2', sourcetyperadix='10', sourcetypesize='5', sourcetypeid='2', sourcetypename='numeric')  SORTABLE
+    )
+    CONSTRAINT 'dummy_nba_data_pkey' PRIMARY KEY ( 'id' )
+    INDEX 'dummy_nba_data_pkey' OTHER UNIQUE PRIMARY ( 'id' );
+
+CREATE OR REPLACE TABLE bv_dummy_nba_data I18N us_cst (
+        id:int (notnull, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        player_name:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        team:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        position:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        points_per_game:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5'),
+        rebounds_per_game:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5'),
+        assists_per_game:decimal (sourcetypeid = '2', sourcetyperadix = '10', sourcetypedecimals = '2', sourcetypesize = '5')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'dummy_nba_data_pkey' PRIMARY KEY ( 'id' )
+    CACHE FULL
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_dummy_nba_data(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD player_name (any) OPT ANY
+             ADD team (any) OPT ANY
+             ADD position (any) OPT ANY
+             ADD points_per_game (any) OPT ANY
+             ADD rebounds_per_game (any) OPT ANY
+             ADD assists_per_game (any) OPT ANY
+        )
+        OUTPUTLIST (assists_per_game, id, player_name, points_per_game, position, rebounds_per_game, team
+        )
+        WRAPPER (jdbc bv_dummy_nba_data)
+    );
+

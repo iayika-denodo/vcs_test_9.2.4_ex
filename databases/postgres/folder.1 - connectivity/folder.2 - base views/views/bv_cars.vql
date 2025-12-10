@@ -1,0 +1,42 @@
+﻿# REQUIRES-PROPERTIES-FILE - # Do not remove this comment!
+CREATE OR REPLACE WRAPPER JDBC bv_cars
+    FOLDER = '/1 - connectivity/2 - base views'
+    DATASOURCENAME=ds_denodo
+    SCHEMANAME='${databases.postgres.folder.1 - connectivity.folder.2 - base views.views.jdbc.bv_cars.SCHEMANAME}' ESCAPE
+    RELATIONNAME='cars' 
+    OUTPUTSCHEMA (
+        id = 'id' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='serial')  NOT NULL SORTABLE IS_AUTOINCREMENT,
+        make = 'make' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        model = 'model' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        body_type = 'body_type' :'java.lang.String' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='2147483647', sourcetypeid='12', sourcetypename='text')  SORTABLE,
+        price = 'price' :'java.lang.Integer' (OPT) (sourcetypedecimals='0', sourcetyperadix='10', sourcetypesize='10', sourcetypeid='4', sourcetypename='int4')  SORTABLE
+    )
+    CONSTRAINT 'cars_pkey' PRIMARY KEY ( 'id' )
+    INDEX 'cars_pkey' OTHER UNIQUE PRIMARY ( 'id' );
+
+CREATE OR REPLACE TABLE bv_cars I18N us_cst (
+        id:int (notnull, autoincrement, sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10'),
+        make:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        model:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        body_type:text (sourcetypeid = '-9', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '2147483647'),
+        price:int (sourcetypeid = '4', sourcetyperadix = '10', sourcetypedecimals = '0', sourcetypesize = '10')
+    )
+    FOLDER = '/1 - connectivity/2 - base views'
+    CONSTRAINT 'cars_pkey' PRIMARY KEY ( 'id' )
+    CACHE FULL
+    BATCHSIZEINCACHE DEFAULT
+    TIMETOLIVEINCACHE DEFAULT
+    ADD SEARCHMETHOD bv_cars(
+        I18N us_cst
+        CONSTRAINTS (
+             ADD id (any) OPT ANY
+             ADD make (any) OPT ANY
+             ADD model (any) OPT ANY
+             ADD body_type (any) OPT ANY
+             ADD price (any) OPT ANY
+        )
+        OUTPUTLIST (body_type, id, make, model, price
+        )
+        WRAPPER (jdbc bv_cars)
+    );
+
