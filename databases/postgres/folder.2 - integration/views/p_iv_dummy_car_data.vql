@@ -1,0 +1,5 @@
+﻿CREATE OR REPLACE VIEW p_iv_dummy_car_data FOLDER = '/2 - integration' AS SELECT iv_dummy_car_data.id AS id, iv_dummy_car_data.make AS make, iv_dummy_car_data.body_type AS body_type, iv_dummy_car_data.year AS year, iv_dummy_car_data.color AS color, iv_dummy_car_data.mileage AS mileage FROM iv_dummy_car_data;
+
+ALTER VIEW p_iv_dummy_car_data
+ LAYOUT (iv_dummy_car_data = [20, 20, 200, 200]);
+
